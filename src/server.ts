@@ -1,10 +1,10 @@
 import express from 'express';
 
+import routes from './routes';
+
 const app = express();
 
-app.get('/', (request, response) => {
-  response.json({ message: 'API is running!' });
-});
+app.use(routes);
 
 app.listen(3000, () => {
   console.log('app running on port 3000');
