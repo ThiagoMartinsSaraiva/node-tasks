@@ -32,6 +32,26 @@ export default class TasksRepository {
     return task;
   }
 
+  public update(id: string, { name, description, done, date }: TaskDTO): Task {
+    const taskIndex = this.tasks.findIndex(task => task.id === id);
+
+    if (taskIndex > -1) {
+      const task = {
+        id,
+        name,
+        description,
+        done,
+        date,
+      };
+
+      this.tasks[taskIndex] = task;
+
+      return task;
+    }
+
+    throw new Error('Task não encontrada.');
+  }
+
   public delete(id: string): Task {
     const taskIndex = this.tasks.findIndex(task => task.id === id);
 

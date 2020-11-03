@@ -31,7 +31,20 @@ tasksRouter.post('/', async (request, response) => {
 });
 
 tasksRouter.put('/:id', async (request, response) => {
-  return response.json({ message: 'task updated' });
+  try {
+    const { name, description, done, date } = request.body;
+    const { id } = request.params;
+
+    const task = tasksRepository.update(id, {
+      name,
+      description,
+      done,
+      date,
+    });
+    return response.json({ task });
+  } catch (err) {
+    return response.status(400).json({ error: err.message });
+  }
 });
 
 tasksRouter.delete('/:id', async (request, response) => {
