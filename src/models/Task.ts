@@ -1,11 +1,11 @@
 export default class Task {
-  id: string;
+  id?: string;
 
   name: string;
 
   description: string;
 
-  status: string;
+  done: boolean;
 
   date: Date;
 }
