@@ -1,9 +1,10 @@
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 import Task from '../models/Task';
 
 interface TaskDTO {
   name: string;
   description: string;
+  done: boolean;
   date: Date;
 }
 export default class TasksRepository {
@@ -17,12 +18,12 @@ export default class TasksRepository {
     return this.tasks;
   }
 
-  public create({ name, description, date }: TaskDTO): Task {
+  public create({ name, description, done, date }: TaskDTO): Task {
     const task: Task = {
-      id: uuid(),
+      id: v4(),
       name,
       description,
-      done: false,
+      done,
       date,
     };
 
@@ -34,7 +35,7 @@ export default class TasksRepository {
   public delete(id: string): Task {
     const taskIndex = this.tasks.findIndex(task => task.id === id);
 
-    if (taskIndex > 0) {
+    if (taskIndex > -1) {
       const task = this.tasks.splice(taskIndex, 1)[0];
       return task;
     }

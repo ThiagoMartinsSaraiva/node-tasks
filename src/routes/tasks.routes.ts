@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import TasksRepository from '../repositories/TasksRepository';
+import CreateTaskService from '../services/CreateTaskService';
 
 const tasksRouter = Router();
 
@@ -13,15 +14,20 @@ tasksRouter.get('/', async (request, response) => {
 });
 
 tasksRouter.post('/', async (request, response) => {
-  const { name, description, date } = request.body;
+  try {
+    const { name, description, date } = request.body;
+    const createTaskService = new CreateTaskService(tasksRepository);
 
-  const task = tasksRepository.create({
-    name,
-    description,
-    date,
-  });
+    const task = createTaskService.execute({
+      name,
+      description,
+      date,
+    });
 
-  return response.json({ task });
+    return response.json({ task });
+  } catch (err) {
+    return response.status(400).json({ error: err.message });
+  }
 });
 
 tasksRouter.put('/:id', async (request, response) => {
@@ -33,7 +39,7 @@ tasksRouter.delete('/:id', async (request, response) => {
     const task = tasksRepository.delete(request.params.id);
     return response.json({ message: 'task deleted', task });
   } catch (err) {
-    return response.json({ err });
+    return response.status(400).json({ error: err.message });
   }
 });
 
